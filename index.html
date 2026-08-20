@@ -999,19 +999,23 @@
       try {
         const inscripciones = await fetch_api('inscripcions');
         estadoApp.inscripciones = {};
-        inscripciones.forEach(ins => {
-          if (!estadoApp.inscripciones[ins.activitat_id]) {
-            estadoApp.inscripciones[ins.activitat_id] = [];
-          }
-          estadoApp.inscripciones[ins.activitat_id].push({
-            id: ins.id,
-            nombre: ins.nom_cognom
+        if (Array.isArray(inscripciones)) {
+          inscripciones.forEach(ins => {
+            if (!estadoApp.inscripciones[ins.activitat_id]) {
+              estadoApp.inscripciones[ins.activitat_id] = [];
+            }
+            estadoApp.inscripciones[ins.activitat_id].push({
+              id: ins.id,
+              nombre: ins.nom_cognom
+            });
           });
-        });
-        console.log('Inscripciones cargadas:', Object.keys(estadoApp.inscripciones).length, 'actividades');
+        }
+        console.log('✅ Inscripciones cargadas:', Object.keys(estadoApp.inscripciones).length, 'actividades con inscritos');
       } catch (err) {
-        console.error('Error al cargar inscripciones:', err);
+        console.error('⚠️ Error al cargar inscripciones:', err);
+        console.error('Detalles:', err.code, err.message);
         estadoApp.inscripciones = {};
+        mostrarError('⚠️ No se pudieron cargar las inscripciones. Revisa las políticas RLS de Supabase.');
       }
     }
 
@@ -1651,8 +1655,11 @@
       document.querySelectorAll('.seccion-vista').forEach(sec => sec.classList.remove('active'));
       document.getElementById(`vista-${vista}`).classList.add('active');
 
-      document.querySelectorAll('.vista-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
+      document.querySelectorAll('.vista-btn').forEach((btn, index) => {
+        btn.classList.remove('active');
+        const btnVista = btn.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+        if (btnVista === vista) btn.classList.add('active');
+      });
 
       if (vista === 'populares') renderizarPopulares();
       if (vista === 'dashboard') renderizarDashboard();
