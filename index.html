@@ -1388,13 +1388,21 @@
 
         mensajeDiv.innerHTML = '<div class="success">✅ Apuntat correctament!</div>';
 
-        setTimeout(() => {
-          (async () => {
+        setTimeout(async () => {
           await cargarInscripciones();
-          })();
           actualizarUserBadge();
           renderizarDias();
+          renderizarPopulares();
           renderizarDashboard();
+
+          if (estadoApp.vistaActual === 'dias') {
+            mostrarDia(estadoApp.diaActual);
+          } else if (estadoApp.vistaActual === 'populares') {
+            renderizarPopulares();
+          } else if (estadoApp.vistaActual === 'dashboard') {
+            renderizarDashboard();
+          }
+
           cerrarModal();
         }, 800);
       } catch (err) {
@@ -1426,9 +1434,19 @@
         }
 
         await cargarInscripciones();
+
         renderizarDias();
         renderizarPopulares();
         renderizarDashboard();
+
+        if (estadoApp.vistaActual === 'dias') {
+          mostrarDia(estadoApp.diaActual);
+        } else if (estadoApp.vistaActual === 'populares') {
+          renderizarPopulares();
+        } else if (estadoApp.vistaActual === 'dashboard') {
+          renderizarDashboard();
+        }
+
         mostrarExito('✅ Desapuntat correctament!');
       } catch (err) {
         mostrarError('❌ Error al desapuntar: ' + err.message);
@@ -1527,9 +1545,19 @@
 
         await fetch_api('inscripcions', 'POST', data);
         await cargarInscripciones();
+
         renderizarDias();
         renderizarPopulares();
         renderizarDashboard();
+
+        if (estadoApp.vistaActual === 'dias') {
+          mostrarDia(estadoApp.diaActual);
+        } else if (estadoApp.vistaActual === 'populares') {
+          renderizarPopulares();
+        } else if (estadoApp.vistaActual === 'dashboard') {
+          renderizarDashboard();
+        }
+
         mostrarExito(`✅ Apuntat a ${actividad.nom.substring(0, 30)}...`);
       } catch (err) {
         mostrarError('Error al apuntar-te: ' + err.message);
