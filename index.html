@@ -870,7 +870,9 @@
         mensajeDiv.innerHTML = '<div class="success">✅ Apuntat correctament!</div>';
 
         setTimeout(() => {
-          await cargarInscripciones();
+          (async () => {
+            await cargarInscripciones();
+          })();
           renderizarDias();
           cerrarModal();
         }, 800);
