@@ -1032,7 +1032,8 @@
       const headers = {
         'Content-Type': 'application/json',
         'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Prefer': 'return=representation'
       };
 
       const url = `${SUPABASE_URL}/rest/v1/${tabla}`;
@@ -1048,11 +1049,25 @@
       try {
         const respuesta = await fetch(url, opciones);
         if (!respuesta.ok) {
-          const error = await respuesta.json();
-          console.error('Error API:', error);
-          throw new Error(error.message || 'Error en la solicitud');
+          try {
+            const error = await respuesta.json();
+            console.error('Error API:', error);
+            throw new Error(error.message || `Error ${respuesta.status}`);
+          } catch (e) {
+            const errorText = await respuesta.text();
+            throw new Error(`Error ${respuesta.status}: ${errorText}`);
+          }
         }
-        return await respuesta.json();
+
+        const texto = await respuesta.text();
+        if (!texto) return [];
+
+        try {
+          return JSON.parse(texto);
+        } catch (e) {
+          console.warn('No valid JSON returned, returning empty array');
+          return [];
+        }
       } catch (err) {
         console.error('Fetch error:', err);
         throw err;
