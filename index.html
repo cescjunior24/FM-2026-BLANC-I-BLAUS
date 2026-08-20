@@ -1405,16 +1405,18 @@
         });
 
         if (!respuesta.ok) {
-          throw new Error('Error al desapuntar');
+          const errorText = await respuesta.text();
+          console.error('Delete error response:', errorText);
+          throw new Error(`Error ${respuesta.status}: ${errorText}`);
         }
 
         await cargarInscripciones();
         renderizarDias();
         renderizarPopulares();
         renderizarDashboard();
-        mostrarExito('Desapuntat correctament!');
+        mostrarExito('✅ Desapuntat correctament!');
       } catch (err) {
-        mostrarError('Error al desapuntar: ' + err.message);
+        mostrarError('❌ Error al desapuntar: ' + err.message);
         console.error('Delete error:', err);
       }
     }
