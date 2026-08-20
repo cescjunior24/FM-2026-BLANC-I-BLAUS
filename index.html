@@ -489,18 +489,378 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+    /* Header user badge */
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: linear-gradient(135deg, var(--color-blau) 0%, var(--color-blau-clar) 100%);
+      color: var(--color-blanc);
+    }
+
+    .user-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .user-badge:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Nav buttons para vistas */
+    .vista-nav {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding: 1rem;
+      background-color: var(--color-gris);
+      border-bottom: 2px solid var(--color-blau);
+      justify-content: center;
+      flex-wrap: wrap;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .vista-btn {
+      padding: 0.6rem 1.2rem;
+      border: 2px solid var(--color-blau);
+      background-color: var(--color-blanc);
+      color: var(--color-blau);
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      transition: all 0.3s ease;
+    }
+
+    .vista-btn:hover {
+      background-color: var(--color-blau-clar);
+      color: var(--color-blanc);
+      transform: translateY(-2px);
+    }
+
+    .vista-btn.active {
+      background-color: var(--color-blau);
+      color: var(--color-blanc);
+      box-shadow: 0 4px 8px rgba(0, 61, 165, 0.3);
+    }
+
+    /* Secciones de vista */
+    .seccion-vista {
+      display: none;
+    }
+
+    .seccion-vista.active {
+      display: block;
+    }
+
+    /* Populares */
+    .popular-item {
+      background-color: var(--color-gris);
+      border-left: 5px solid var(--color-accent);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .popular-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .popular-posicion {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: var(--color-accent);
+      min-width: 40px;
+      text-align: center;
+    }
+
+    .popular-info {
+      flex: 1;
+    }
+
+    .popular-titulo {
+      font-size: 1.05rem;
+      font-weight: bold;
+      color: var(--color-gris-fosc);
+      margin-bottom: 0.3rem;
+    }
+
+    .popular-detalles {
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    .popular-contador {
+      background-color: var(--color-blau);
+      color: var(--color-blanc);
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .popular-barra {
+      background-color: rgba(0, 61, 165, 0.2);
+      border-radius: 4px;
+      height: 8px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+
+    .popular-barra-fill {
+      background-color: var(--color-blau);
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    /* Dashboard */
+    .dashboard-container {
+      padding: 1rem 0;
+    }
+
+    .stat-tiles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-tile {
+      background: linear-gradient(135deg, var(--color-blau) 0%, var(--color-blau-clar) 100%);
+      color: var(--color-blanc);
+      padding: 1.5rem;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 61, 165, 0.15);
+    }
+
+    .stat-valor {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    .dashboard-grafico {
+      background-color: var(--color-gris);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .grafico-titulo {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--color-blau);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .grafico-barras {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-around;
+      gap: 0.5rem;
+      height: 180px;
+    }
+
+    .barra-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      flex: 1;
+    }
+
+    .barra {
+      width: 100%;
+      background-color: var(--color-blau);
+      border-radius: 4px 4px 0 0;
+      transition: all 0.3s ease;
+      min-height: 5px;
+    }
+
+    .barra:hover {
+      background-color: var(--color-blau-clar);
+    }
+
+    .barra-label {
+      font-size: 0.75rem;
+      font-weight: bold;
+      color: var(--color-blau);
+      text-align: center;
+      width: 100%;
+    }
+
+    .barra-valor {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: var(--color-gris-fosc);
+    }
+
+    .meus-activitats {
+      background-color: var(--color-gris);
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .meus-activitats-titulo {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--color-blau);
+      margin-bottom: 1rem;
+    }
+
+    .dia-activitats {
+      margin-bottom: 1.5rem;
+    }
+
+    .dia-activitats-titulo {
+      font-size: 1rem;
+      font-weight: bold;
+      color: var(--color-blau);
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--color-accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .activitat-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem;
+      background-color: var(--color-blanc);
+      border-left: 3px solid var(--color-blau);
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .activitat-hora {
+      font-weight: bold;
+      color: var(--color-blau);
+      min-width: 50px;
+    }
+
+    .activitat-nom {
+      flex: 1;
+      margin-left: 1rem;
+      color: var(--color-gris-fosc);
+    }
+
+    .activitat-btn-remove {
+      background: none;
+      border: none;
+      color: #FF6B6B;
+      cursor: pointer;
+      font-size: 1.2rem;
+      padding: 0.25rem 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .activitat-btn-remove:hover {
+      transform: scale(1.2);
+      color: #C92A2A;
+    }
+
+    /* Modal para cambiar nombre */
+    .modal-user-config {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-user-config.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .user-config-content {
+      background-color: var(--color-blanc);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .user-config-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--color-blau);
+      margin-bottom: 1.5rem;
+    }
+
+    .user-config-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>🎪 Festa Major Blancs i Blaus 🎪</h1>
-    <p>Granollers 2026 · 22-30 d'agost</p>
+  <div class="header-top">
+    <h1 style="margin: 0; font-size: 1.5rem;">🎪 Festa Major 2026 🎪</h1>
+    <div class="user-badge" id="userBadge" onclick="abrirModalConfigUsuario()">
+      <span id="userBadgeText">👤 Configura el teu nom</span>
+      <span>✏️</span>
+    </div>
+  </div>
+
+  <header style="padding: 1.5rem 1rem; text-align: center;">
+    <p style="margin: 0; font-size: 0.95rem; opacity: 0.95;">Blancs i Blaus · Granollers · 22-30 d'agost</p>
   </header>
+
+  <div class="vista-nav" id="vistasNav">
+    <button class="vista-btn active" onclick="cambiarVista('dias')">📅 Programa</button>
+    <button class="vista-btn" onclick="cambiarVista('populares')">🔥 Més populars</button>
+    <button class="vista-btn" onclick="cambiarVista('dashboard')">📊 El meu Dashboard</button>
+  </div>
 
   <div class="dias-tabs" id="diasTabs"></div>
 
   <div class="container">
-    <div id="contenedor-dias"></div>
+    <!-- Vista: Programa per dia -->
+    <div class="seccion-vista active" id="vista-dias">
+      <div id="contenedor-dias"></div>
+    </div>
+
+    <!-- Vista: Més populars -->
+    <div class="seccion-vista" id="vista-populares">
+      <div id="contenedor-populares"></div>
+    </div>
+
+    <!-- Vista: El meu Dashboard -->
+    <div class="seccion-vista" id="vista-dashboard">
+      <div id="contenedor-dashboard"></div>
+    </div>
   </div>
 
   <!-- Modal Apunta't -->
@@ -533,6 +893,30 @@
     </div>
   </div>
 
+  <!-- Modal Configurar usuari -->
+  <div class="modal-user-config" id="modalConfigUsuario">
+    <div class="user-config-content">
+      <h2 class="user-config-title">👤 El teu nom</h2>
+      <form id="formConfigUsuario">
+        <div class="form-group">
+          <label class="form-label" for="inputNomConfig">Nom i Cognoms</label>
+          <input
+            type="text"
+            id="inputNomConfig"
+            class="form-input"
+            placeholder="Ex: Joan Martí Garcia"
+            required
+          >
+        </div>
+        <div id="configMessage"></div>
+        <div class="user-config-actions">
+          <button type="button" class="btn btn-secondary btn-full" onclick="cerrarModalConfigUsuario()">Cancel·lar</button>
+          <button type="submit" class="btn btn-primary btn-full">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
     // ===== CONFIG SUPABASE =====
     const SUPABASE_URL = 'https://jhlshykxcwpcmbvbchko.supabase.co';
@@ -544,7 +928,9 @@
       actividades: [],
       inscripciones: {},
       modalActividadId: null,
-      cargando: false
+      cargando: false,
+      nombreUsuario: localStorage.getItem('fm2026_nom') || null,
+      vistaActual: 'dias'
     };
 
     const DIAS = [
@@ -631,9 +1017,13 @@
 
     // ===== RENDERIZAR =====
     function renderizarApp() {
+      actualizarUserBadge();
       renderizarTabs();
       renderizarDias();
+      renderizarPopulares();
+      renderizarDashboard();
       mostrarDia(DIAS[0]);
+      cambiarVista('dias');
     }
 
     function renderizarTabs() {
@@ -735,8 +1125,25 @@
 
       const btnApunta = document.createElement('button');
       btnApunta.className = 'btn btn-primary';
-      btnApunta.textContent = '✏️ Apunta\'m';
-      btnApunta.onclick = () => abrirModalApunta(actividad);
+
+      const participantes = estadoApp.inscripciones[actividad.id] || [];
+      const yaEstaInscrito = estadoApp.nombreUsuario && participantes.some(p => normalizar(p.nombre) === normalizar(estadoApp.nombreUsuario));
+
+      if (yaEstaInscrito) {
+        btnApunta.textContent = '✔️ Ja hi ets';
+        btnApunta.style.backgroundColor = '#28A745';
+        btnApunta.onclick = () => {
+          const ins = participantes.find(p => normalizar(p.nombre) === normalizar(estadoApp.nombreUsuario));
+          if (ins) desapuntarPersona(actividad.id, ins.id);
+        };
+      } else if (estadoApp.nombreUsuario) {
+        btnApunta.textContent = '✏️ Apunta\'m';
+        btnApunta.onclick = () => apuntarRapido(actividad);
+      } else {
+        btnApunta.textContent = '✏️ Apunta\'m';
+        btnApunta.onclick = () => abrirModalApunta(actividad);
+      }
+
       acciones.appendChild(btnApunta);
 
       const numParticipants = (estadoApp.inscripciones[actividad.id] || []).length;
@@ -917,6 +1324,338 @@
       alerta.textContent = '✅ ' + mensaje;
       document.body.insertBefore(alerta, document.querySelector('.container'));
       setTimeout(() => alerta.remove(), 3000);
+    }
+
+    // ===== GESTOR DE USUARIO =====
+    function actualizarUserBadge() {
+      const badge = document.getElementById('userBadgeText');
+      if (estadoApp.nombreUsuario) {
+        badge.textContent = `👤 ${estadoApp.nombreUsuario}`;
+      } else {
+        badge.textContent = '👤 Configura el teu nom';
+      }
+    }
+
+    function abrirModalConfigUsuario() {
+      document.getElementById('inputNomConfig').value = estadoApp.nombreUsuario || '';
+      document.getElementById('modalConfigUsuario').classList.add('active');
+      document.getElementById('inputNomConfig').focus();
+    }
+
+    function cerrarModalConfigUsuario() {
+      document.getElementById('modalConfigUsuario').classList.remove('active');
+    }
+
+    document.getElementById('formConfigUsuario').onsubmit = async (e) => {
+      e.preventDefault();
+      const nom = document.getElementById('inputNomConfig').value.trim();
+
+      if (!nom || nom.length < 3) {
+        document.getElementById('configMessage').innerHTML = '<div class="error">⚠️ El nom ha de tenir almenys 3 caràcters.</div>';
+        return;
+      }
+
+      estadoApp.nombreUsuario = nom;
+      localStorage.setItem('fm2026_nom', nom);
+      actualizarUserBadge();
+      cerrarModalConfigUsuario();
+      renderizarDias();
+      renderizarDashboard();
+      mostrarExito(`✅ Hola, ${nom}!`);
+    };
+
+    // ===== APUNTAMENT RAPIDO =====
+    async function apuntarRapido(actividad) {
+      try {
+        const data = {
+          activitat_id: actividad.id,
+          nom_cognom: estadoApp.nombreUsuario
+        };
+
+        await fetch_api('inscripcions', 'POST', data);
+        await cargarInscripciones();
+        renderizarDias();
+        renderizarPopulares();
+        renderizarDashboard();
+        mostrarExito(`✅ Apuntat a ${actividad.nom.substring(0, 30)}...`);
+      } catch (err) {
+        mostrarError('Error al apuntar-te: ' + err.message);
+      }
+    }
+
+    // ===== FUNCIONES UTILIDAD =====
+    function normalizar(texto) {
+      return texto.toLowerCase().trim();
+    }
+
+    function contarActividadesPorDia(nombreUsuario) {
+      const conteo = {};
+      DIAS.forEach(dia => conteo[dia] = 0);
+
+      Object.values(estadoApp.inscripciones).forEach(participantes => {
+        participantes.forEach(p => {
+          if (normalizar(p.nombre) === normalizar(nombreUsuario)) {
+            const actividad = estadoApp.actividades.find(a =>
+              estadoApp.inscripciones[a.id]?.some(ins => ins.id === p.id)
+            );
+            if (actividad) {
+              conteo[actividad.dia]++;
+            }
+          }
+        });
+      });
+
+      return conteo;
+    }
+
+    // ===== VISTA POPULARES =====
+    function renderizarPopulares() {
+      const contenedor = document.getElementById('contenedor-populares');
+      contenedor.innerHTML = '';
+
+      const actividadesConConteo = estadoApp.actividades.map(act => ({
+        actividad: act,
+        inscritos: (estadoApp.inscripciones[act.id] || []).length
+      }));
+
+      actividadesConConteo.sort((a, b) => b.inscritos - a.inscritos);
+
+      const titulo = document.createElement('h2');
+      titulo.className = 'dia-titulo';
+      titulo.textContent = '🔥 Activitats més populars';
+      contenedor.appendChild(titulo);
+
+      const maxInscritos = Math.max(...actividadesConConteo.map(a => a.inscritos), 1);
+      const top = actividadesConConteo.slice(0, 20);
+
+      if (top.length === 0) {
+        const empty = document.createElement('p');
+        empty.style.textAlign = 'center';
+        empty.style.color = '#999';
+        empty.textContent = 'Encara no hi ha activitats apuntades.';
+        contenedor.appendChild(empty);
+        return;
+      }
+
+      top.forEach((item, index) => {
+        const popularItem = document.createElement('div');
+        popularItem.className = 'popular-item';
+
+        const header = document.createElement('div');
+        header.className = 'popular-header';
+
+        const posicion = document.createElement('div');
+        posicion.className = 'popular-posicion';
+        posicion.textContent = `${index + 1}º`;
+
+        const info = document.createElement('div');
+        info.className = 'popular-info';
+
+        const titulo = document.createElement('div');
+        titulo.className = 'popular-titulo';
+        titulo.textContent = item.actividad.nom;
+
+        const detalles = document.createElement('div');
+        detalles.className = 'popular-detalles';
+        detalles.textContent = `${item.actividad.dia} · ${item.actividad.hora} · ${item.actividad.lloc}`;
+
+        info.appendChild(titulo);
+        info.appendChild(detalles);
+
+        const contador = document.createElement('div');
+        contador.className = 'popular-contador';
+        contador.textContent = `👥 ${item.inscritos}`;
+
+        header.appendChild(posicion);
+        header.appendChild(info);
+        header.appendChild(contador);
+
+        const barra = document.createElement('div');
+        barra.className = 'popular-barra';
+
+        const barraFill = document.createElement('div');
+        barraFill.className = 'popular-barra-fill';
+        barraFill.style.width = `${(item.inscritos / maxInscritos) * 100}%`;
+
+        barra.appendChild(barraFill);
+
+        popularItem.appendChild(header);
+        popularItem.appendChild(barra);
+        contenedor.appendChild(popularItem);
+      });
+    }
+
+    // ===== VISTA DASHBOARD =====
+    function renderizarDashboard() {
+      const contenedor = document.getElementById('contenedor-dashboard');
+      contenedor.innerHTML = '';
+
+      if (!estadoApp.nombreUsuario) {
+        const llamada = document.createElement('div');
+        llamada.style.textAlign = 'center';
+        llamada.style.padding = '2rem';
+        llamada.innerHTML = `
+          <p style="font-size: 1.1rem; margin-bottom: 1rem;">👤 Primer, configura el teu nom!</p>
+          <button class="btn btn-primary" onclick="abrirModalConfigUsuario()">Configurar nom</button>
+        `;
+        contenedor.appendChild(llamada);
+        return;
+      }
+
+      const conteoActividadesPorDia = contarActividadesPorDia(estadoApp.nombreUsuario);
+      const totalMisActividades = Object.values(conteoActividadesPorDia).reduce((a, b) => a + b, 0);
+      const diaMasActivo = Object.keys(conteoActividadesPorDia).reduce((a, b) =>
+        conteoActividadesPorDia[b] > conteoActividadesPorDia[a] ? b : a
+      );
+      const totalInscripcionesFesta = Object.keys(estadoApp.inscripciones).reduce((sum, actId) =>
+        sum + (estadoApp.inscripciones[actId]?.length || 0), 0
+      );
+
+      const dashboard = document.createElement('div');
+      dashboard.className = 'dashboard-container';
+
+      const statTiles = document.createElement('div');
+      statTiles.className = 'stat-tiles';
+
+      const tile1 = document.createElement('div');
+      tile1.className = 'stat-tile';
+      tile1.innerHTML = `<div class="stat-valor">${totalMisActividades}</div><div class="stat-label">Les meves activitats</div>`;
+
+      const tile2 = document.createElement('div');
+      tile2.className = 'stat-tile';
+      tile2.innerHTML = `<div class="stat-valor">${diaMasActivo.split(' ')[1]}</div><div class="stat-label">El meu dia més actiu</div>`;
+
+      const tile3 = document.createElement('div');
+      tile3.className = 'stat-tile';
+      tile3.innerHTML = `<div class="stat-valor">${totalInscripcionesFesta}</div><div class="stat-label">Total a la festa</div>`;
+
+      statTiles.appendChild(tile1);
+      statTiles.appendChild(tile2);
+      statTiles.appendChild(tile3);
+      dashboard.appendChild(statTiles);
+
+      // Gráfico de barras
+      const graficoContainer = document.createElement('div');
+      graficoContainer.className = 'dashboard-grafico';
+
+      const graficoTitulo = document.createElement('div');
+      graficoTitulo.className = 'grafico-titulo';
+      graficoTitulo.textContent = 'Els teus dies més actius';
+
+      graficoContainer.appendChild(graficoTitulo);
+
+      const barrasDiv = document.createElement('div');
+      barrasDiv.className = 'grafico-barras';
+
+      const maxActividades = Math.max(...Object.values(conteoActividadesPorDia), 1);
+
+      DIAS.forEach(dia => {
+        const container = document.createElement('div');
+        container.className = 'barra-container';
+
+        const barra = document.createElement('div');
+        barra.className = 'barra';
+        const altura = (conteoActividadesPorDia[dia] / maxActividades) * 100;
+        barra.style.height = `${Math.max(altura, 5)}%`;
+
+        const label = document.createElement('div');
+        label.className = 'barra-label';
+        label.textContent = dia.split(' ')[1];
+
+        const valor = document.createElement('div');
+        valor.className = 'barra-valor';
+        valor.textContent = conteoActividadesPorDia[dia];
+
+        container.appendChild(barra);
+        container.appendChild(label);
+        container.appendChild(valor);
+        barrasDiv.appendChild(container);
+      });
+
+      graficoContainer.appendChild(barrasDiv);
+      dashboard.appendChild(graficoContainer);
+
+      // Listado de mis actividades
+      const meusActivitatsDiv = document.createElement('div');
+      meusActivitatsDiv.className = 'meus-activitats';
+
+      const meusActivitatsTitulo = document.createElement('div');
+      meusActivitatsTitulo.className = 'meus-activitats-titulo';
+      meusActivitatsTitulo.textContent = 'Les meves inscripcions';
+
+      meusActivitatsDiv.appendChild(meusActivitatsTitulo);
+
+      DIAS.forEach(dia => {
+        const actividadesDia = estadoApp.actividades.filter(a => a.dia === dia);
+        const minasEnDia = [];
+
+        actividadesDia.forEach(act => {
+          const participantes = estadoApp.inscripciones[act.id] || [];
+          if (participantes.some(p => normalizar(p.nombre) === normalizar(estadoApp.nombreUsuario))) {
+            const inscripcion = participantes.find(p => normalizar(p.nombre) === normalizar(estadoApp.nombreUsuario));
+            minasEnDia.push({ actividad: act, inscripcionId: inscripcion.id });
+          }
+        });
+
+        if (minasEnDia.length > 0) {
+          const diaActividadesDiv = document.createElement('div');
+          diaActividadesDiv.className = 'dia-activitats';
+
+          const diaTitle = document.createElement('div');
+          diaTitle.className = 'dia-activitats-titulo';
+          diaTitle.textContent = dia;
+
+          diaActividadesDiv.appendChild(diaTitle);
+
+          minasEnDia.sort((a, b) => {
+            const horaA = parseInt(a.actividad.hora_sort.replace(':', ''));
+            const horaB = parseInt(b.actividad.hora_sort.replace(':', ''));
+            return horaA - horaB;
+          });
+
+          minasEnDia.forEach(item => {
+            const actividadItem = document.createElement('div');
+            actividadItem.className = 'activitat-item';
+
+            const hora = document.createElement('div');
+            hora.className = 'activitat-hora';
+            hora.textContent = item.actividad.hora;
+
+            const nom = document.createElement('div');
+            nom.className = 'activitat-nom';
+            nom.textContent = item.actividad.nom;
+
+            const btn = document.createElement('button');
+            btn.className = 'activitat-btn-remove';
+            btn.textContent = '✕';
+            btn.onclick = () => desapuntarPersona(item.actividad.id, item.inscripcionId);
+
+            actividadItem.appendChild(hora);
+            actividadItem.appendChild(nom);
+            actividadItem.appendChild(btn);
+            diaActividadesDiv.appendChild(actividadItem);
+          });
+
+          meusActivitatsDiv.appendChild(diaActividadesDiv);
+        }
+      });
+
+      dashboard.appendChild(meusActivitatsDiv);
+      contenedor.appendChild(dashboard);
+    }
+
+    // ===== CAMBIAR VISTA =====
+    function cambiarVista(vista) {
+      estadoApp.vistaActual = vista;
+
+      document.querySelectorAll('.seccion-vista').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(`vista-${vista}`).classList.add('active');
+
+      document.querySelectorAll('.vista-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      if (vista === 'populares') renderizarPopulares();
+      if (vista === 'dashboard') renderizarDashboard();
     }
 
     // ===== INIT =====
