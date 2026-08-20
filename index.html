@@ -647,6 +647,37 @@
       border-radius: 12px;
       text-align: center;
       box-shadow: 0 4px 8px rgba(0, 61, 165, 0.15);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      position: relative;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .stat-tile:hover {
+      transform: scale(1.05);
+    }
+
+    .stat-tile-front {
+      width: 100%;
+    }
+
+    .stat-tile-back {
+      display: none;
+      width: 100%;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .stat-tile.flipped .stat-tile-front {
+      display: none;
+    }
+
+    .stat-tile.flipped .stat-tile-back {
+      display: block;
     }
 
     .stat-valor {
@@ -1725,21 +1756,47 @@
       const statTilesGlobal = document.createElement('div');
       statTilesGlobal.className = 'stat-tiles';
 
-      const tileGlobal1 = document.createElement('div');
-      tileGlobal1.className = 'stat-tile';
-      tileGlobal1.innerHTML = `<div class="stat-valor">${totalInscripcionesFesta}</div><div class="stat-label">Inscrits totals</div>`;
+      const crearTile = (valor, label, explicacio) => {
+        const tile = document.createElement('div');
+        tile.className = 'stat-tile';
+        tile.innerHTML = `
+          <div class="stat-tile-front">
+            <div class="stat-valor">${valor}</div>
+            <div class="stat-label">${label}</div>
+            <div style="font-size: 0.7rem; margin-top: 0.5rem; opacity: 0.7;">Clica →</div>
+          </div>
+          <div class="stat-tile-back">${explicacio}</div>
+        `;
+        tile.onclick = (e) => {
+          e.stopPropagation();
+          tile.classList.toggle('flipped');
+        };
+        return tile;
+      };
 
-      const tileGlobal2 = document.createElement('div');
-      tileGlobal2.className = 'stat-tile';
-      tileGlobal2.innerHTML = `<div class="stat-valor">${usuariosUnicos.size}</div><div class="stat-label">Persones diferentes</div>`;
+      const tileGlobal1 = crearTile(
+        totalInscripcionesFesta,
+        'Inscrits totals',
+        'Suma de TOTES les inscripcions. Si algú es apunta a 3 activitats, compta 3.'
+      );
 
-      const tileGlobal3 = document.createElement('div');
-      tileGlobal3.className = 'stat-tile';
-      tileGlobal3.innerHTML = `<div class="stat-valor">${diaConMasActividades.split(' ')[1]}</div><div class="stat-label">Dia més actiu</div>`;
+      const tileGlobal2 = crearTile(
+        usuariosUnicos.size,
+        'Persones úniques',
+        'Quanta gent diferent s\'ha apuntat (sense contar duplicats).'
+      );
 
-      const tileGlobal4 = document.createElement('div');
-      tileGlobal4.className = 'stat-tile';
-      tileGlobal4.innerHTML = `<div class="stat-valor">${(estadoApp.inscripciones[actividadConMasInscritos.id] || []).length}</div><div class="stat-label">Activitat 🏆</div>`;
+      const tileGlobal3 = crearTile(
+        diaConMasActividades.split(' ')[1],
+        'Dia més foll',
+        'El dia amb més activitats que tens gent. Demà serà una follia!'
+      );
+
+      const tileGlobal4 = crearTile(
+        (estadoApp.inscripciones[actividadConMasInscritos.id] || []).length,
+        'Acte estrella 🏆',
+        `La més popular: "${actividadConMasInscritos.nom.substring(0, 20)}..."`
+      );
 
       statTilesGlobal.appendChild(tileGlobal1);
       statTilesGlobal.appendChild(tileGlobal2);
@@ -1826,17 +1883,23 @@
       const statTilesPersonal = document.createElement('div');
       statTilesPersonal.className = 'stat-tiles';
 
-      const tilePersonal1 = document.createElement('div');
-      tilePersonal1.className = 'stat-tile';
-      tilePersonal1.innerHTML = `<div class="stat-valor">${totalMisActividades}</div><div class="stat-label">Les meves activitats</div>`;
+      const tilePersonal1 = crearTile(
+        totalMisActividades,
+        'Les meves activitats',
+        `T'has apuntat a ${totalMisActividades} activitats en total. T'estàs fent la festa completa!`
+      );
 
-      const tilePersonal2 = document.createElement('div');
-      tilePersonal2.className = 'stat-tile';
-      tilePersonal2.innerHTML = `<div class="stat-valor">${diaMasActivoPersonal.split(' ')[1]}</div><div class="stat-label">El meu dia més actiu</div>`;
+      const tilePersonal2 = crearTile(
+        diaMasActivoPersonal.split(' ')[1],
+        'Dia més actiu',
+        `El dia que tens més activitats apuntades. Aquell dia estaràs ocupat!`
+      );
 
-      const tilePersonal3 = document.createElement('div');
-      tilePersonal3.className = 'stat-tile';
-      tilePersonal3.innerHTML = `<div class="stat-valor">${Math.round((totalMisActividades / (estadoApp.actividades.length || 1)) * 100)}%</div><div class="stat-label">% de la festa</div>`;
+      const tilePersonal3 = crearTile(
+        `${Math.round((totalMisActividades / (estadoApp.actividades.length || 1)) * 100)}%`,
+        '% de la festa',
+        `Quina part de totes les activitats cobreixes tu. Els persentatge més alt gana! 🏆`
+      );
 
       statTilesPersonal.appendChild(tilePersonal1);
       statTilesPersonal.appendChild(tilePersonal2);
