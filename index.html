@@ -884,6 +884,15 @@
             required
           >
         </div>
+        <div class="form-group">
+          <label class="form-label" for="aliasInput">Alias o Motxo <span style="font-size: 0.8rem; color: #666;">(opcional, si hi ha més gent amb el teu nom)</span></label>
+          <input
+            type="text"
+            id="aliasInput"
+            class="form-input"
+            placeholder="Ex: El Joni, Motxo, Blanco #1"
+          >
+        </div>
         <div id="formMessage"></div>
         <div class="modal-actions">
           <button type="button" class="btn btn-secondary btn-full" id="cancelModal">Cancel·lar</button>
@@ -896,7 +905,7 @@
   <!-- Modal Configurar usuari -->
   <div class="modal-user-config" id="modalConfigUsuario">
     <div class="user-config-content">
-      <h2 class="user-config-title">👤 El teu nom</h2>
+      <h2 class="user-config-title">👤 El teu perfil</h2>
       <form id="formConfigUsuario">
         <div class="form-group">
           <label class="form-label" for="inputNomConfig">Nom i Cognoms</label>
@@ -906,6 +915,15 @@
             class="form-input"
             placeholder="Ex: Joan Martí Garcia"
             required
+          >
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inputAliasConfig">Alias o Motxo <span style="font-size: 0.8rem; color: #666;">(opcional, per diferenciar-te si hi ha dos amb el mateix nom)</span></label>
+          <input
+            type="text"
+            id="inputAliasConfig"
+            class="form-input"
+            placeholder="Ex: El Joni, Motxo, Blanco #1"
           >
         </div>
         <div id="configMessage"></div>
@@ -930,6 +948,7 @@
       modalActividadId: null,
       cargando: false,
       nombreUsuario: localStorage.getItem('fm2026_nom') || null,
+      aliasUsuario: localStorage.getItem('fm2026_alias') || null,
       vistaActual: 'dias'
     };
 
@@ -1131,13 +1150,14 @@
       btnApunta.className = 'btn btn-primary';
 
       const participantes = estadoApp.inscripciones[actividad.id] || [];
-      const yaEstaInscrito = estadoApp.nombreUsuario && participantes.some(p => normalizar(p.nombre) === normalizar(estadoApp.nombreUsuario));
+      const nomCompletoBuscar = getNomCompleto() ? normalizar(getNomCompleto()) : null;
+      const yaEstaInscrito = nomCompletoBuscar && participantes.some(p => normalizar(p.nombre) === nomCompletoBuscar);
 
       if (yaEstaInscrito) {
         btnApunta.textContent = '✔️ Ja hi ets';
         btnApunta.style.backgroundColor = '#28A745';
         btnApunta.onclick = () => {
-          const ins = participantes.find(p => normalizar(p.nombre) === normalizar(estadoApp.nombreUsuario));
+          const ins = participantes.find(p => normalizar(p.nombre) === nomCompletoBuscar);
           if (ins) desapuntarPersona(actividad.id, ins.id);
         };
       } else if (estadoApp.nombreUsuario) {
@@ -1256,6 +1276,7 @@
 
     async function apuntarPersona() {
       const nomCognom = document.getElementById('nomCognom').value.trim();
+      const aliasInput = document.getElementById('aliasInput')?.value.trim() || '';
       const mensajeDiv = document.getElementById('formMessage');
 
       if (!nomCognom) {
@@ -1271,12 +1292,21 @@
       try {
         mensajeDiv.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
 
+        const nomComplet = aliasInput ? `${nomCognom} (${aliasInput})` : nomCognom;
+
         const data = {
           activitat_id: estadoApp.modalActividadId,
-          nom_cognom: nomCognom
+          nom_cognom: nomComplet
         };
 
         await fetch_api('inscripcions', 'POST', data);
+
+        estadoApp.nombreUsuario = nomCognom;
+        estadoApp.aliasUsuario = aliasInput || null;
+        localStorage.setItem('fm2026_nom', nomCognom);
+        if (aliasInput) {
+          localStorage.setItem('fm2026_alias', aliasInput);
+        }
 
         mensajeDiv.innerHTML = '<div class="success">✅ Apuntat correctament!</div>';
 
@@ -1284,7 +1314,9 @@
           (async () => {
           await cargarInscripciones();
           })();
+          actualizarUserBadge();
           renderizarDias();
+          renderizarDashboard();
           cerrarModal();
         }, 800);
       } catch (err) {
@@ -1331,10 +1363,19 @@
     }
 
     // ===== GESTOR DE USUARIO =====
+    function getNomCompleto() {
+      if (!estadoApp.nombreUsuario) return null;
+      if (estadoApp.aliasUsuario) {
+        return `${estadoApp.nombreUsuario} (${estadoApp.aliasUsuario})`;
+      }
+      return estadoApp.nombreUsuario;
+    }
+
     function actualizarUserBadge() {
       const badge = document.getElementById('userBadgeText');
       if (estadoApp.nombreUsuario) {
-        badge.textContent = `👤 ${estadoApp.nombreUsuario}`;
+        const nomCompleto = getNomCompleto();
+        badge.textContent = `👤 ${nomCompleto}`;
       } else {
         badge.textContent = '👤 Configura el teu nom';
       }
@@ -1342,6 +1383,7 @@
 
     function abrirModalConfigUsuario() {
       document.getElementById('inputNomConfig').value = estadoApp.nombreUsuario || '';
+      document.getElementById('inputAliasConfig').value = estadoApp.aliasUsuario || '';
       document.getElementById('modalConfigUsuario').classList.add('active');
       document.getElementById('inputNomConfig').focus();
     }
@@ -1353,6 +1395,7 @@
     document.getElementById('formConfigUsuario').onsubmit = async (e) => {
       e.preventDefault();
       const nom = document.getElementById('inputNomConfig').value.trim();
+      const alias = document.getElementById('inputAliasConfig').value.trim();
 
       if (!nom || nom.length < 3) {
         document.getElementById('configMessage').innerHTML = '<div class="error">⚠️ El nom ha de tenir almenys 3 caràcters.</div>';
@@ -1360,20 +1403,28 @@
       }
 
       estadoApp.nombreUsuario = nom;
+      estadoApp.aliasUsuario = alias || null;
       localStorage.setItem('fm2026_nom', nom);
+      if (alias) {
+        localStorage.setItem('fm2026_alias', alias);
+      } else {
+        localStorage.removeItem('fm2026_alias');
+      }
       actualizarUserBadge();
       cerrarModalConfigUsuario();
       renderizarDias();
       renderizarDashboard();
-      mostrarExito(`✅ Hola, ${nom}!`);
+      const nomCompleto = getNomCompleto();
+      mostrarExito(`✅ Hola, ${nomCompleto}!`);
     };
 
     // ===== APUNTAMENT RAPIDO =====
     async function apuntarRapido(actividad) {
       try {
+        const nomCompleto = getNomCompleto();
         const data = {
           activitat_id: actividad.id,
-          nom_cognom: estadoApp.nombreUsuario
+          nom_cognom: nomCompleto
         };
 
         await fetch_api('inscripcions', 'POST', data);
@@ -1396,9 +1447,11 @@
       const conteo = {};
       DIAS.forEach(dia => conteo[dia] = 0);
 
+      const nomBuscar = normalizar(getNomCompleto() || nombreUsuario);
+
       Object.values(estadoApp.inscripciones).forEach(participantes => {
         participantes.forEach(p => {
-          if (normalizar(p.nombre) === normalizar(nombreUsuario)) {
+          if (normalizar(p.nombre) === nomBuscar) {
             const actividad = estadoApp.actividades.find(a =>
               estadoApp.inscripciones[a.id]?.some(ins => ins.id === p.id)
             );
@@ -1717,14 +1770,16 @@
 
       meusActivitatsDiv.appendChild(meusActivitatsTitulo);
 
+      const nomBuscarDashboard = normalizar(getNomCompleto() || estadoApp.nombreUsuario);
+
       DIAS.forEach(dia => {
         const actividadesDia = estadoApp.actividades.filter(a => a.dia === dia);
         const minasEnDia = [];
 
         actividadesDia.forEach(act => {
           const participantes = estadoApp.inscripciones[act.id] || [];
-          if (participantes.some(p => normalizar(p.nombre) === normalizar(estadoApp.nombreUsuario))) {
-            const inscripcion = participantes.find(p => normalizar(p.nombre) === normalizar(estadoApp.nombreUsuario));
+          if (participantes.some(p => normalizar(p.nombre) === nomBuscarDashboard)) {
+            const inscripcion = participantes.find(p => normalizar(p.nombre) === nomBuscarDashboard);
             minasEnDia.push({ actividad: act, inscripcionId: inscripcion.id });
           }
         });
