@@ -1494,53 +1494,180 @@
       const contenedor = document.getElementById('contenedor-dashboard');
       contenedor.innerHTML = '';
 
+      const dashboard = document.createElement('div');
+      dashboard.className = 'dashboard-container';
+
+      // ===== ESTADÍSTIQUES GLOBALS =====
+      const totalInscripcionesFesta = Object.keys(estadoApp.inscripciones).reduce((sum, actId) =>
+        sum + (estadoApp.inscripciones[actId]?.length || 0), 0
+      );
+
+      const usuariosUnicos = new Set();
+      Object.values(estadoApp.inscripciones).forEach(participantes => {
+        participantes.forEach(p => usuariosUnicos.add(normalizar(p.nombre)));
+      });
+
+      const conteoGlobalPorDia = {};
+      DIAS.forEach(dia => conteoGlobalPorDia[dia] = 0);
+
+      Object.entries(estadoApp.inscripciones).forEach(([actId, participantes]) => {
+        if (participantes.length > 0) {
+          const actividad = estadoApp.actividades.find(a => a.id == actId);
+          if (actividad) {
+            conteoGlobalPorDia[actividad.dia]++;
+          }
+        }
+      });
+
+      const diaConMasActividades = Object.keys(conteoGlobalPorDia).reduce((a, b) =>
+        conteoGlobalPorDia[b] > conteoGlobalPorDia[a] ? b : a
+      );
+
+      const actividadConMasInscritos = estadoApp.actividades.reduce((max, act) => {
+        const inscritos = (estadoApp.inscripciones[act.id] || []).length;
+        const maxInscritos = (estadoApp.inscripciones[max.id] || []).length;
+        return inscritos > maxInscritos ? act : max;
+      });
+
+      // Section global stats
+      const seccionGlobal = document.createElement('div');
+      seccionGlobal.style.marginBottom = '2.5rem';
+      seccionGlobal.style.paddingBottom = '1.5rem';
+      seccionGlobal.style.borderBottom = '3px solid var(--color-accent)';
+
+      const tituloGlobal = document.createElement('h3');
+      tituloGlobal.style.fontSize = '1.3rem';
+      tituloGlobal.style.fontWeight = 'bold';
+      tituloGlobal.style.color = 'var(--color-blau)';
+      tituloGlobal.style.marginBottom = '1.5rem';
+      tituloGlobal.textContent = '🎪 Context global de la festa';
+      seccionGlobal.appendChild(tituloGlobal);
+
+      const statTilesGlobal = document.createElement('div');
+      statTilesGlobal.className = 'stat-tiles';
+
+      const tileGlobal1 = document.createElement('div');
+      tileGlobal1.className = 'stat-tile';
+      tileGlobal1.innerHTML = `<div class="stat-valor">${totalInscripcionesFesta}</div><div class="stat-label">Inscrits totals</div>`;
+
+      const tileGlobal2 = document.createElement('div');
+      tileGlobal2.className = 'stat-tile';
+      tileGlobal2.innerHTML = `<div class="stat-valor">${usuariosUnicos.size}</div><div class="stat-label">Persones diferentes</div>`;
+
+      const tileGlobal3 = document.createElement('div');
+      tileGlobal3.className = 'stat-tile';
+      tileGlobal3.innerHTML = `<div class="stat-valor">${diaConMasActividades.split(' ')[1]}</div><div class="stat-label">Dia més actiu</div>`;
+
+      const tileGlobal4 = document.createElement('div');
+      tileGlobal4.className = 'stat-tile';
+      tileGlobal4.innerHTML = `<div class="stat-valor">${(estadoApp.inscripciones[actividadConMasInscritos.id] || []).length}</div><div class="stat-label">Activitat 🏆</div>`;
+
+      statTilesGlobal.appendChild(tileGlobal1);
+      statTilesGlobal.appendChild(tileGlobal2);
+      statTilesGlobal.appendChild(tileGlobal3);
+      statTilesGlobal.appendChild(tileGlobal4);
+      seccionGlobal.appendChild(statTilesGlobal);
+
+      // Gráfico global de dies
+      const graficoGlobalContainer = document.createElement('div');
+      graficoGlobalContainer.className = 'dashboard-grafico';
+      graficoGlobalContainer.style.marginTop = '1.5rem';
+
+      const graficoGlobalTitulo = document.createElement('div');
+      graficoGlobalTitulo.className = 'grafico-titulo';
+      graficoGlobalTitulo.textContent = 'Intensitat de la festa per dia (activitats amb gent)';
+
+      graficoGlobalContainer.appendChild(graficoGlobalTitulo);
+
+      const barrasGlobalDiv = document.createElement('div');
+      barrasGlobalDiv.className = 'grafico-barras';
+
+      const maxActivitiesDias = Math.max(...Object.values(conteoGlobalPorDia), 1);
+
+      DIAS.forEach(dia => {
+        const container = document.createElement('div');
+        container.className = 'barra-container';
+
+        const barra = document.createElement('div');
+        barra.className = 'barra';
+        const altura = (conteoGlobalPorDia[dia] / maxActivitiesDias) * 100;
+        barra.style.height = `${Math.max(altura, 5)}%`;
+
+        const label = document.createElement('div');
+        label.className = 'barra-label';
+        label.textContent = dia.split(' ')[1];
+
+        const valor = document.createElement('div');
+        valor.className = 'barra-valor';
+        valor.textContent = conteoGlobalPorDia[dia];
+
+        container.appendChild(barra);
+        container.appendChild(label);
+        container.appendChild(valor);
+        barrasGlobalDiv.appendChild(container);
+      });
+
+      graficoGlobalContainer.appendChild(barrasGlobalDiv);
+      seccionGlobal.appendChild(graficoGlobalContainer);
+
+      dashboard.appendChild(seccionGlobal);
+
+      // ===== SI NO HI HA NOM, MOSTRAR CALL-TO-ACTION =====
       if (!estadoApp.nombreUsuario) {
         const llamada = document.createElement('div');
         llamada.style.textAlign = 'center';
         llamada.style.padding = '2rem';
         llamada.innerHTML = `
-          <p style="font-size: 1.1rem; margin-bottom: 1rem;">👤 Primer, configura el teu nom!</p>
+          <p style="font-size: 1.1rem; margin-bottom: 1rem;">👤 Configura el teu nom per veure les teves estadístiques personals!</p>
           <button class="btn btn-primary" onclick="abrirModalConfigUsuario()">Configurar nom</button>
         `;
-        contenedor.appendChild(llamada);
+        dashboard.appendChild(llamada);
+        contenedor.appendChild(dashboard);
         return;
       }
 
+      // ===== ESTADÍSTIQUES PERSONALS =====
       const conteoActividadesPorDia = contarActividadesPorDia(estadoApp.nombreUsuario);
       const totalMisActividades = Object.values(conteoActividadesPorDia).reduce((a, b) => a + b, 0);
-      const diaMasActivo = Object.keys(conteoActividadesPorDia).reduce((a, b) =>
+      const diaMasActivoPersonal = Object.keys(conteoActividadesPorDia).reduce((a, b) =>
         conteoActividadesPorDia[b] > conteoActividadesPorDia[a] ? b : a
       );
-      const totalInscripcionesFesta = Object.keys(estadoApp.inscripciones).reduce((sum, actId) =>
-        sum + (estadoApp.inscripciones[actId]?.length || 0), 0
-      );
 
-      const dashboard = document.createElement('div');
-      dashboard.className = 'dashboard-container';
+      const seccionPersonal = document.createElement('div');
+      seccionPersonal.style.marginTop = '2.5rem';
 
-      const statTiles = document.createElement('div');
-      statTiles.className = 'stat-tiles';
+      const tituloPersonal = document.createElement('h3');
+      tituloPersonal.style.fontSize = '1.3rem';
+      tituloPersonal.style.fontWeight = 'bold';
+      tituloPersonal.style.color = 'var(--color-blau)';
+      tituloPersonal.style.marginBottom = '1.5rem';
+      tituloPersonal.textContent = '👤 El teu dashbord personal';
+      seccionPersonal.appendChild(tituloPersonal);
 
-      const tile1 = document.createElement('div');
-      tile1.className = 'stat-tile';
-      tile1.innerHTML = `<div class="stat-valor">${totalMisActividades}</div><div class="stat-label">Les meves activitats</div>`;
+      const statTilesPersonal = document.createElement('div');
+      statTilesPersonal.className = 'stat-tiles';
 
-      const tile2 = document.createElement('div');
-      tile2.className = 'stat-tile';
-      tile2.innerHTML = `<div class="stat-valor">${diaMasActivo.split(' ')[1]}</div><div class="stat-label">El meu dia més actiu</div>`;
+      const tilePersonal1 = document.createElement('div');
+      tilePersonal1.className = 'stat-tile';
+      tilePersonal1.innerHTML = `<div class="stat-valor">${totalMisActividades}</div><div class="stat-label">Les meves activitats</div>`;
 
-      const tile3 = document.createElement('div');
-      tile3.className = 'stat-tile';
-      tile3.innerHTML = `<div class="stat-valor">${totalInscripcionesFesta}</div><div class="stat-label">Total a la festa</div>`;
+      const tilePersonal2 = document.createElement('div');
+      tilePersonal2.className = 'stat-tile';
+      tilePersonal2.innerHTML = `<div class="stat-valor">${diaMasActivoPersonal.split(' ')[1]}</div><div class="stat-label">El meu dia més actiu</div>`;
 
-      statTiles.appendChild(tile1);
-      statTiles.appendChild(tile2);
-      statTiles.appendChild(tile3);
-      dashboard.appendChild(statTiles);
+      const tilePersonal3 = document.createElement('div');
+      tilePersonal3.className = 'stat-tile';
+      tilePersonal3.innerHTML = `<div class="stat-valor">${Math.round((totalMisActividades / (estadoApp.actividades.length || 1)) * 100)}%</div><div class="stat-label">% de la festa</div>`;
 
-      // Gráfico de barras
+      statTilesPersonal.appendChild(tilePersonal1);
+      statTilesPersonal.appendChild(tilePersonal2);
+      statTilesPersonal.appendChild(tilePersonal3);
+      seccionPersonal.appendChild(statTilesPersonal);
+
+      // Gráfico personal de barras
       const graficoContainer = document.createElement('div');
       graficoContainer.className = 'dashboard-grafico';
+      graficoContainer.style.marginTop = '1.5rem';
 
       const graficoTitulo = document.createElement('div');
       graficoTitulo.className = 'grafico-titulo';
@@ -1577,11 +1704,12 @@
       });
 
       graficoContainer.appendChild(barrasDiv);
-      dashboard.appendChild(graficoContainer);
+      seccionPersonal.appendChild(graficoContainer);
 
       // Listado de mis actividades
       const meusActivitatsDiv = document.createElement('div');
       meusActivitatsDiv.className = 'meus-activitats';
+      meusActivitatsDiv.style.marginTop = '1.5rem';
 
       const meusActivitatsTitulo = document.createElement('div');
       meusActivitatsTitulo.className = 'meus-activitats-titulo';
@@ -1644,7 +1772,8 @@
         }
       });
 
-      dashboard.appendChild(meusActivitatsDiv);
+      seccionPersonal.appendChild(meusActivitatsDiv);
+      dashboard.appendChild(seccionPersonal);
       contenedor.appendChild(dashboard);
     }
 
