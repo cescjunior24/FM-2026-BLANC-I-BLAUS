@@ -767,6 +767,15 @@
       gap: 0.75rem;
       flex: 1;
       min-width: 30px;
+      height: 100%;
+    }
+
+    .barra-track {
+      display: flex;
+      align-items: flex-end;
+      width: 100%;
+      flex: 1;
+      min-height: 140px;
     }
 
     .barra {
@@ -1876,10 +1885,15 @@
         const container = document.createElement('div');
         container.className = 'barra-container';
 
+        const track = document.createElement('div');
+        track.className = 'barra-track';
+
         const barra = document.createElement('div');
         barra.className = 'barra';
         const altura = (conteoGlobalPorDia[dia] / maxActivitiesDias) * 100;
         barra.style.height = `${Math.max(altura, 3)}%`;
+
+        track.appendChild(barra);
 
         const label = document.createElement('div');
         label.className = 'barra-label';
@@ -1889,7 +1903,7 @@
         valor.className = 'barra-valor';
         valor.textContent = conteoGlobalPorDia[dia];
 
-        container.appendChild(barra);
+        container.appendChild(track);
         container.appendChild(label);
         container.appendChild(valor);
         barrasGlobalDiv.appendChild(container);
@@ -1978,10 +1992,15 @@
         const container = document.createElement('div');
         container.className = 'barra-container';
 
+        const track = document.createElement('div');
+        track.className = 'barra-track';
+
         const barra = document.createElement('div');
         barra.className = 'barra';
         const altura = (conteoActividadesPorDia[dia] / maxActividades) * 100;
         barra.style.height = `${Math.max(altura, 3)}%`;
+
+        track.appendChild(barra);
 
         const label = document.createElement('div');
         label.className = 'barra-label';
@@ -1991,7 +2010,7 @@
         valor.className = 'barra-valor';
         valor.textContent = conteoActividadesPorDia[dia];
 
-        container.appendChild(barra);
+        container.appendChild(track);
         container.appendChild(label);
         container.appendChild(valor);
         barrasDiv.appendChild(container);
